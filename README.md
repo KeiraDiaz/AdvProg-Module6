@@ -30,7 +30,7 @@ Additionally, a **`BufReader`** is used to read lines from the `TcpStream` using
 ## Reflection 2: 
 ### Returning HTML Content
 
-![Returning-html-picture](image.png)
+![Returning-html-picture](images/image.png)
 
 The `handle_connection` function is responsible for processing client requests and sending back an appropriate response. It does this by reading the contents of `hello.html` using `fs::read_to_string`, which loads the file into a string. This allows the server to send an HTML page as part of the response.  
 
@@ -40,3 +40,29 @@ The `handle_connection` function is responsible for processing client requests a
 3. **Send the Response** – The complete response (status line, headers, and body) is written to the `TcpStream` using `write_all()`, ensuring it is fully sent to the client.  
 
 This allows the server to serve web pages when accessed by a browser. 
+
+
+## Reflection 3: 
+###  Validating request and selectively responding
+
+![validating_request](images\image_2.png)
+
+Initially, the web server always returned the **hello.html** page regardless of the incoming request. Now, we have added functionality to verify whether the browser is requesting **"/"** before sending a response. If the request does not match, the server will return a **404 status code** along with a **404.html** error page.  
+
+**Implementation Explanation**  
+
+1. **Using `buf_reader.lines()`**  
+   - `lines()` generates an iterator over the lines in the **BufReader**.  
+
+2. **Extracting the first request line**  
+   - `next()` retrieves the first element from the iterator.  
+   - The first `unwrap()` handles the possible `Option` returned by `next()`.  
+   - The second `unwrap()` handles the `Result` returned by `lines()`.  
+
+
+**Final Outcome**  
+- **If the user accesses `/`**, the server returns **hello.html** with a **200 OK status code**.  
+- **If the user accesses any other route**, the server returns **404.html** with a **404 NOT FOUND status code**.  
+- **The code is cleaner and more maintainable** by avoiding repeated variable declarations (`status_line` and `contents`).  
+
+This implementation aligns with **clean code principles and maintainability**, ensuring that the server can handle requests efficiently. 
