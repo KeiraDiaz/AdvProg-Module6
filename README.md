@@ -66,3 +66,15 @@ Initially, the web server always returned the **hello.html** page regardless of 
 - **The code is cleaner and more maintainable** by avoiding repeated variable declarations (`status_line` and `contents`).  
 
 This implementation aligns with **clean code principles and maintainability**, ensuring that the server can handle requests efficiently. 
+
+
+## Reflection 4: 
+### Simulation slow response
+
+Here, we will simulate a **slow response** in the _web server_ by introducing a performance bottleneck through a **`/sleep`** route.  
+
+When this route is accessed, the server invokes **`thread::sleep()`**, pausing for **10 seconds** before sending a response. This demonstrates how a **single-threaded server** handles delays or heavy processing loads, where a single slow request can block the entire server.  
+
+To test this, we open **two browser windows** and compare the behavior of the **`/`** and **`/sleep`** endpoints. If we load **`/`** while **`/sleep`** is still processing, we observe that **`/`** remains unresponsive until **`/sleep`** completes its **10-second delay**. This behavior highlights the **limitations of a single-threaded architecture**, as it prevents the server from efficiently handling multiple concurrent requests.  
+
+Through this experiment, I realized the importance of **multithreading and asynchronous processing** in real-world web servers. Without concurrency, slow or blocked requests can significantly degrade overall performance. This exercise helped me understand the relationship between **concurrency and server performance**, reinforcing why modern web servers must incorporate **efficient parallel processing techniques** to remain scalable and responsive. 
