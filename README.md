@@ -78,3 +78,29 @@ When this route is accessed, the server invokes **`thread::sleep()`**, pausing f
 To test this, we open **two browser windows** and compare the behavior of the **`/`** and **`/sleep`** endpoints. If we load **`/`** while **`/sleep`** is still processing, we observe that **`/`** remains unresponsive until **`/sleep`** completes its **10-second delay**. This behavior highlights the **limitations of a single-threaded architecture**, as it prevents the server from efficiently handling multiple concurrent requests.  
 
 Through this experiment, I realized the importance of **multithreading and asynchronous processing** in real-world web servers. Without concurrency, slow or blocked requests can significantly degrade overall performance. This exercise helped me understand the relationship between **concurrency and server performance**, reinforcing why modern web servers must incorporate **efficient parallel processing techniques** to remain scalable and responsive. 
+
+## Reflection 5: 
+### Multithreaded Server with ThreadPool
+
+
+We upgraded the web server from **single-threaded** to **multi-threaded** using **ThreadPool**. This allows multiple requests to be processed at the same time, improving performance.  
+
+**How ThreadPool Works**  
+- **Manages multiple threads** to handle incoming tasks.  
+- Each `Worker` has:  
+  - A **unique ID**  
+  - A `thread*`
+  - A `JoinHandle<()>` to manage execution  
+
+**How Tasks Are Processed**  
+1. **ThreadPool Initialization**  
+   - Creates a **vector of Workers**.  
+   - Uses a **channel** to send tasks to Workers.  
+
+2. **Task Execution**  
+   - `execute()` sends tasks through the `channel`.  
+   - Workers receive tasks and run them.  
+   - `Mutex` ensures safe access to shared resources.  
+
+
+With **ThreadPool**, the web server is now faster, scalable, and more responsive. 
