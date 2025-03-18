@@ -7,6 +7,7 @@
     - [Milestone 3](#reflection-3)
     - [Milestone 4](#reflection-4)
     - [Milestone 5](#reflection-5)
+    - [Bonus Milestone](#bonus-reflection)
 
 
 ## Reflection 1: 
@@ -102,5 +103,22 @@ We upgraded the web server from **single-threaded** to **multi-threaded** using 
    - Workers receive tasks and run them.  
    - `Mutex` ensures safe access to shared resources.  
 
-
 With **ThreadPool**, the web server is now faster, scalable, and more responsive. 
+
+## Bonus Reflection: 
+
+We replaced the **`new()`** function with **`build()`** in the **ThreadPool** implementation to improve **modularity and error handling**. 
+
+**Why Use `build()` Instead of `new()`?**  
+- **Better Error Handling**:  
+  - **`new()`** panics on invalid input.  
+  - **`build()`** returns a **`Result`**, allowing the caller to handle errors gracefully.  
+- **More Expressive Naming**:  
+  - **`build()`** is commonly used in Rust when object creation involves additional setup, hinting at future extensibility.  
+  - **Useful for builder patterns** in complex configurations.  
+
+**Implementation Details**  
+- **Handles invalid input**: If `ThreadPool` is created with **0 or a negative size**, `build()` returns an **`Err`** instead of panicking.  
+- **Functionally identical to `new()`**: It still creates a **channel**, wraps it in **`Mutex<Arc<T>>`**, and initializes **worker threads**.  
+
+By adopting **`build()`**, we make our code **more robust, readable, and aligned with best practices** in Rust. 
